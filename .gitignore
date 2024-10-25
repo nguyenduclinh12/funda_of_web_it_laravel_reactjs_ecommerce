@@ -1,0 +1,21 @@
+# dependencies
+/reactecom/node_modules
+/reactecom/.pnp
+/reactecom/.pnp.js
+
+# testing
+/reactecom/coverage
+
+# production
+/reactecom/build
+
+# misc
+/reactecom/.DS_Store
+/reactecom/.env.local
+/reactecom/.env.development.local
+/reactecom/.env.test.local
+/reactecom/.env.production.local
+
+/reactecom/npm-debug.log*
+/reactecom/yarn-debug.log*
+/reactecom/yarn-error.log*
