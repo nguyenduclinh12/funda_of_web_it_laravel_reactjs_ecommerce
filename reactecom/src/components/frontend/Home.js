@@ -1,11 +1,13 @@
-import React from 'react';
+import React from "react";
+import Navbar from "../../layouts/frontend/Navbar";
 
 const Home = () => {
-    return (
-        <>
-        <h1>home fontend</h1>
-        </>
-    );
+  return (
+    <>
+      <Navbar></Navbar>
+      <h1>home fontend</h1>
+    </>
+  );
 };
 
 export default Home;

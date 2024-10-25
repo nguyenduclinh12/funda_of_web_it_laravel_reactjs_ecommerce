@@ -5,6 +5,7 @@ import App from "./App";
 import reportWebVitals from "./reportWebVitals";
 import "./../src/assets/admin/vendor/fontawesome-free/css/all.min.css";
 import "./../src/assets/admin/css/sb-admin-2.min.css";
+import 'bootstrap/dist/css/bootstrap.min.css';
 
 
 
