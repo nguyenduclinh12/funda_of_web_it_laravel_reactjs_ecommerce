@@ -1,7 +1,29 @@
-import React from "react";
-import { Link } from "react-router-dom";
+import React, { useEffect, useState } from "react";
+import { Link, useNavigate } from "react-router-dom";
+import axios from "../../lib/axios";
 
 const Navbar = () => {
+  const [isLogin, setIsLogin] = useState(true);
+  const navigate = useNavigate();
+  useEffect(() => {
+    if (localStorage.getItem("auth_token")) {
+      setIsLogin(false);
+    }
+  }, []);
+
+  const logoutSubmit = (e) => {
+    e.preventDefault();
+    axios.post("api/logout").then((res) => {
+      // axios.post("api/logout").then((res) => {
+      console.log(res.data);
+      if (res.data.status === 200) {
+        localStorage.removeItem("auth_token", res.data.token);
+        localStorage.removeItem("auth_name", res.data.username);
+        navigate("/");
+      }
+    });
+  };
+
   return (
     <nav className="navbar navbar-expand-lg bg-body-tertiary bg-primary shadow sticky-top">
       <div className="container-fluid">
@@ -31,16 +53,32 @@ const Navbar = () => {
                 Collection
               </Link>
             </li>
-            <li className="nav-item">
-              <Link className="nav-link" to="/login">
-                Login
-              </Link>
-            </li>
-            <li className="nav-item">
-              <Link className="nav-link" to="/register">
-                Register
-              </Link>
-            </li>
+            {isLogin ? (
+              <>
+                <li className="nav-item">
+                  <Link className="nav-link" to="/login">
+                    Login
+                  </Link>
+                </li>
+                <li className="nav-item">
+                  <Link className="nav-link" to="/register">
+                    Register
+                  </Link>
+                </li>
+              </>
+            ) : (
+              <li className="nav-item">
+                <Link className="nav-link" to="/logout">
+                  <button
+                    type="button"
+                    className="btn btn-danger btn-sm"
+                    onClick={logoutSubmit}
+                  >
+                    Logout
+                  </button>
+                </Link>
+              </li>
+            )}
           </ul>
           <form className="d-flex" role="search">
             <input

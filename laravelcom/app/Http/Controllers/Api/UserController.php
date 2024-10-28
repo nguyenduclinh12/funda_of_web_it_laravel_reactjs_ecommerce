@@ -73,10 +73,61 @@ class UserController extends Controller
             }
             $user = User::where('email', $request->email)->first();
             return response()->json([
-                'status' => false,
-                'name' => $user->name,
+                'status' => true,
+                'username' => $user->name,
                 'message' => 'User Logged In Successfully',
                 'token' => $user->createToken('Api Token')->plainTextToken
+            ], 200);
+        } catch (HttpException $ex) {
+            return response()->json([
+                'status' => false,
+                'message' => $ex->getMessage()
+            ], 500);
+        }
+    }
+    /*
+        Dòng lệnh này sẽ chỉ xóa token hiện tại của người dùng, tức là token của thiết bị hoặc phiên đang đăng nhập.
+        Điều này hữu ích nếu bạn muốn cho phép đăng nhập trên nhiều thiết bị hoặc tab khác nhau, và chỉ muốn đăng xuất khỏi thiết bị hiện tại.
+    */
+    public function logoutUser(Request $request)
+    {
+        try {
+
+            //// Session-based authentication
+
+
+            //// API token-based authentication
+            // $user = $request->user();
+            // if ($user->currentAccessToken()) {
+            //     $user->currentAccessToken()->delete();
+            // }
+            return response()->json([
+                'status' => 200,
+                'message' => 'User Logout Successfully'
+            ], 200);
+        } catch (HttpException $ex) {
+            return response()->json([
+                'status' => false,
+                'message' => $ex->getMessage()
+            ], 500);
+        }
+    }
+    /*  Cách này sẽ xóa tất cả các token của người dùng đang đăng nhập, đăng xuất họ khỏi mọi thiết bị hoặc phiên đang sử dụng.
+        Dùng cách này nếu bạn muốn thực hiện một lệnh đăng xuất toàn bộ (global logout) khỏi mọi phiên làm việc.
+        nếu dùng cách này có thể sử dụng  Cookie Session Để Logout: và bật \Laravel\Sanctum\Http\Middleware\EnsureFrontendRequestsAreStateful::class,
+        Thay vì sử dụng token, hãy xác thực qua cookie. Gọi một route logout mà không cần gửi token
+    */
+    public function logoutUserAllDevice(Request $request)
+    {
+        try {
+            //// Session-based authentication
+            auth()->user()->tokens()->delete();
+            //// API token-based authentication
+            // $user = $request->user();
+            // $user->tokens()->delete();
+            return response()->json([
+                'status' => 200,
+                'message' => 'User Logout All Device Successfully'
             ], 200);
         } catch (HttpException $ex) {
             return response()->json([

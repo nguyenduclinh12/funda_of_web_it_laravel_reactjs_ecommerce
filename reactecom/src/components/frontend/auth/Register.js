@@ -54,7 +54,6 @@ const Register = () => {
             <div className="card">
               <div className="card-header">
                 <h4>Register</h4>
-                <SpinnerLoader />
               </div>
               <div className="card-body">
                 <form action="" onSubmit={registerSubmit}>

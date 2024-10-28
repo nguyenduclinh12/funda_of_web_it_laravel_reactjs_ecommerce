@@ -7,11 +7,16 @@ import Home from "../components/frontend/Home";
 import Dashboard from "../components/admin/Dashboard";
 import Login from "../components/frontend/auth/Login";
 import Register from "../components/frontend/auth/Register";
+import PrivateRoutes from "./PrivateRoutes";
 
 const routes = [
   {
     path: "/",
-    element: <Home />,
+    element: (
+      <PrivateRoutes>
+        <Home />
+      </PrivateRoutes>
+    ),
   },
   {
     path: "/login",
@@ -23,10 +28,14 @@ const routes = [
   },
   {
     path: "/admin",
-    element: <MasterLayout />,
+    element: (
+      <PrivateRoutes>
+        <MasterLayout />
+      </PrivateRoutes>
+    ),
     children: [
       { index: true, element: <Dashboard /> },
-      { index: false, path: "profile", element: <Profile /> },
+      { path: "profile", element: <Profile /> },
     ],
   },
 ];
