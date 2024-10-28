@@ -1,7 +1,50 @@
-import React from "react";
+import React, { useState } from "react";
 import Navbar from "../../../layouts/frontend/Navbar";
+import axios from "../../../lib/axios";
 
 const Register = () => {
+  const [isLoading, setIsLoading] = useState(true);
+  const [registerInput, setRegisterInput] = useState({
+    name: "",
+    email: "",
+    password: "",
+    error_list: [],
+  });
+  const handleInput = (e) => {
+    setRegisterInput({ ...registerInput, [e.target.name]: e.target.value });
+  };
+  const csrf = () => axios.get("sanctum/csrf-cookie");
+  const registerSubmit = async (e) => {
+    e.preventDefault();
+
+    const data = {
+      name: registerInput.name,
+      email: registerInput.email,
+      password: registerInput.password,
+    };
+
+    await csrf();
+    await axios
+      .post("api/auth/register", data)
+      .then((res) => {
+        console.log(res.data);
+        if (res.data.status === 200) {
+          localStorage.setItem("auth_token", res.data.token);
+          localStorage.setItem("auth_name", res.data.username);
+        } else {
+          setRegisterInput({
+            ...registerInput,
+            error_list: res.data.errors,
+          });
+        }
+      })
+      .catch((err) => {
+        setRegisterInput({
+          ...registerInput,
+          error_list: err.response.data.errors,
+        });
+      });
+  };
   return (
     <>
       <Navbar></Navbar>
@@ -11,45 +54,62 @@ const Register = () => {
             <div className="card">
               <div className="card-header">
                 <h4>Register</h4>
+                <SpinnerLoader />
               </div>
               <div className="card-body">
-                <form action="">
+                <form action="" onSubmit={registerSubmit}>
                   <div className="form-group mb-3">
                     <label htmlFor="">Full Name</label>
                     <input
-                      type=""
+                      type="text"
                       name="name"
-                      value=""
+                      value={registerInput.name}
+                      onChange={handleInput}
                       className="form-control"
                     />
+                    {registerInput.error_list.name ? (
+                      <span className="text-danger">
+                        * {registerInput.error_list.name}
+                      </span>
+                    ) : (
+                      ""
+                    )}
                   </div>
                   <div className="form-group mb-3">
                     <label htmlFor="">Email ID</label>
                     <input
-                      type=""
+                      type="email"
                       name="email"
-                      value=""
+                      value={registerSubmit.email}
+                      onChange={handleInput}
                       className="form-control"
                     />
+                    {registerInput.error_list.email ? (
+                      <span className="text-danger">
+                        * {registerInput.error_list.email}
+                      </span>
+                    ) : (
+                      ""
+                    )}
                   </div>
                   <div className="form-group mb-3">
                     <label htmlFor="">Password</label>
                     <input
                       type="password"
                       name="password"
-                      value=""
+                      value={registerInput.password}
+                      onChange={handleInput}
                       className="form-control"
                     />
+                    {registerInput.error_list.password ? (
+                      <span className="text-danger">
+                        * {registerInput.error_list.password}
+                      </span>
+                    ) : (
+                      ""
+                    )}
                   </div>
-                  <div className="form-group mb-3">
-                    <label htmlFor="">Confirm Password</label>
-                    <input
-                      type="password"
-                      name="confirm_password"
-                      value=""
-                      className="form-control"
-                    />
-                  </div>
+
                   <div className="form-group mb-3">
                     <button type="submit" className="btn btn-primary">
                       Register
