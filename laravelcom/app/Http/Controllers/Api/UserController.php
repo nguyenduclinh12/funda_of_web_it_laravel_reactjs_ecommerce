@@ -82,11 +82,14 @@ class UserController extends Controller
                 ], 401);
             }
             $user = User::where('email', $request->email)->first();
-            $token = "";
+            $token = $role = "";
+
             if ($user->role_as === 1) {
                 $token = $user->createToken('_ManagerToken', ['server:admin'])->plainTextToken;
+                $role = 'admin';
             } else if ($user->role_as === 2) {
-                $token =$user->createToken('_UserToken', ['server:user'])->plainTextToken;
+                $token = $user->createToken('_UserToken', ['server:user'])->plainTextToken;
+                $role = 'user';
             } else {
                 $token = $user->createToken('Api Token', [''])->plainTextToken;
             }
@@ -95,7 +98,8 @@ class UserController extends Controller
                 'status' => true,
                 'username' => $user->name,
                 'message' => 'User Logged In Successfully',
-                'token' => $token
+                'token' => $token,
+                'role' => $role
             ], 200);
         } catch (HttpException $ex) {
             return response()->json([

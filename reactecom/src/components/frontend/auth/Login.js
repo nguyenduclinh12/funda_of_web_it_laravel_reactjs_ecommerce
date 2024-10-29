@@ -29,10 +29,13 @@ const Login = () => {
       .then((res) => {
         console.log(res);
         if (res.status === 200) {
-          console.log(res.data)
           localStorage.setItem("auth_token", res.data.token);
           localStorage.setItem("auth_name", res.data.username);
-          navigate("/");
+          if (res.data.role === "admin") {
+            navigate("/admin");
+          } else {
+            navigate("/");
+          }
         } else {
           setLoginInput({
             ...loginInput,
