@@ -14,8 +14,6 @@ const Navbar = () => {
   const logoutSubmit = (e) => {
     e.preventDefault();
     axios.post("api/logout").then((res) => {
-      // axios.post("api/logout").then((res) => {
-      console.log(res.data);
       if (res.data.status === 200) {
         localStorage.removeItem("auth_token", res.data.token);
         localStorage.removeItem("auth_name", res.data.username);

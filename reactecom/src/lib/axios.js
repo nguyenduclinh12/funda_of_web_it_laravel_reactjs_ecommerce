@@ -21,8 +21,8 @@ axios.interceptors.request.use(
         config.headers["X-XSRF-TOKEN"] = decodeURIComponent(token);
       }
     }
-    // const token = localStorage.getItem("auth_token");
-    // config.headers.Authorization = `Bearer ${token}`;
+    const token = localStorage.getItem("auth_token");
+    config.headers.Authorization = `Bearer ${token}`;
     return config;
   },
   (error) => {
@@ -36,13 +36,11 @@ axios.interceptors.response.use(
   },
   (error) => {
     try {
-      const navigate = useNavigate();
       console.log(error);
       const { response } = error;
       if (response?.status === 401) {
         localStorage.removeItem("ACCESS_TOKEN");
         console.log(response);
-        navigate("/login");
       }
     } catch (err) {
       console.error(err);
@@ -51,5 +49,6 @@ axios.interceptors.response.use(
     throw error;
   }
 );
+
 
 export default axios;

@@ -8,6 +8,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Validator;
 use Symfony\Component\HttpKernel\Exception\HttpException;
+use Illuminate\Support\Str;
 
 class UserController extends Controller
 {
@@ -36,13 +37,22 @@ class UserController extends Controller
             $user = User::create([
                 'name' => $request->name,
                 'email' => $request->email,
-                'password' => bcrypt($request->password)
+                'role_as' => $request->role_as ? $request->role_as : 3,
+                'password' => bcrypt(value: $request->password)
             ]);
+            $token = "";
+            if ($user->role_as === 1) {
+                $token = $user->createToken('_ManagerToken', ['server:admin'], now()->addWeek())->plainTextToken;
+            } else if ($user->role_as === 2) {
+                $token = $user->createToken('_UserToken', ['server:user'], now()->addWeek())->plainTextToken;
+            } else {
+                $token = $user->createToken('Api Token', [''], now()->addWeek())->plainTextToken;
+            }
             return response()->json([
                 'status' => true,
                 'username' => $user->name,
                 'message' => 'User Created Successfully',
-                'token' => $user->createToken($user->email . '_token', ['server:create'], now()->addWeek())->plainTextToken
+                'token' => $token
             ], 200);
         } catch (HttpException $ex) {
             return response()->json([
@@ -72,11 +82,20 @@ class UserController extends Controller
                 ], 401);
             }
             $user = User::where('email', $request->email)->first();
+            $token = "";
+            if ($user->role_as === 1) {
+                $token = $user->createToken('_ManagerToken', ['server:admin'])->plainTextToken;
+            } else if ($user->role_as === 2) {
+                $token =$user->createToken('_UserToken', ['server:user'])->plainTextToken;
+            } else {
+                $token = $user->createToken('Api Token', [''])->plainTextToken;
+            }
+
             return response()->json([
                 'status' => true,
                 'username' => $user->name,
                 'message' => 'User Logged In Successfully',
-                'token' => $user->createToken('Api Token')->plainTextToken
+                'token' => $token
             ], 200);
         } catch (HttpException $ex) {
             return response()->json([
@@ -94,13 +113,12 @@ class UserController extends Controller
         try {
 
             //// Session-based authentication
-
-
+            // auth()->user()->tokens()->delete();
             //// API token-based authentication
-            // $user = $request->user();
-            // if ($user->currentAccessToken()) {
-            //     $user->currentAccessToken()->delete();
-            // }
+            $user = $request->user();
+            if ($user->currentAccessToken()) {
+                $user->currentAccessToken()->delete();
+            }
             return response()->json([
                 'status' => 200,
                 'message' => 'User Logout Successfully'
@@ -121,10 +139,10 @@ class UserController extends Controller
     {
         try {
             //// Session-based authentication
-            auth()->user()->tokens()->delete();
+            // auth()->user()->tokens()->delete();
             //// API token-based authentication
-            // $user = $request->user();
-            // $user->tokens()->delete();
+            $user = $request->user();
+            $user->tokens()->delete();
             return response()->json([
                 'status' => 200,
                 'message' => 'User Logout All Device Successfully'

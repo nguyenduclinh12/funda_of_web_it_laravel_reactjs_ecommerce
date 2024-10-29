@@ -8,6 +8,8 @@ import Dashboard from "../components/admin/Dashboard";
 import Login from "../components/frontend/auth/Login";
 import Register from "../components/frontend/auth/Register";
 import PrivateRoutes from "./PrivateRoutes";
+import Page403 from "../components/errors/Page403";
+import Page404 from "../components/errors/Page404";
 
 const routes = [
   {
@@ -25,6 +27,14 @@ const routes = [
   {
     path: "/register",
     element: <Register />,
+  },
+  {
+    path: "/403",
+    element: <Page403 />,
+  },
+  {
+    path: "/404",
+    element: <Page404 />,
   },
   {
     path: "/admin",
