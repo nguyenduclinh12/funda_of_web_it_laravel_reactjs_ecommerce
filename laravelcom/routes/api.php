@@ -22,6 +22,9 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::get('user', [UserController::class, 'index']);
     Route::post('/logout',  [UserController::class, 'logoutUser']);
     Route::post('/logout-all-device',  [UserController::class, 'logoutUserAllDevice']);
+    Route::get('/checkingAuthenticated', function (Request $request) {
+        return $request->user() ? response()->json(['authenticated' => true, 'user' => $request->user()], 200) : response()->json(['authenticated' => false], 401);
+    });
 });
 Route::post('/auth/register', [UserController::class, 'createUser']);
 Route::post('/auth/login', [UserController::class, 'loginUser']);
