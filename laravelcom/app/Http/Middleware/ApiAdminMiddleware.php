@@ -20,13 +20,13 @@ class ApiAdminMiddleware
         //    return response()->json($token);
         //    return response()->json(auth()->user()->tokenCan('server:admin'));
         if (Auth::check()) {
-            if (auth()->user()->tokenCan('server:admin') || auth()->user()->tokenCan('server:user')) {
+            if (auth()->user()->tokenCan('server:admin') || auth()->user()->tokenCan('server:user') || auth()->user()->tokenCan('server:create')) {
 
                 return $next($request);
             } else {
                 return response()->json([
                     'message' => 'Access Denied. ! as you are not ab Admin',
-                    'status'=>403
+                    'status' => 403
                 ], 403);
             }
         } else {

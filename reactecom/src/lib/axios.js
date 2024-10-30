@@ -36,11 +36,9 @@ axios.interceptors.response.use(
   },
   (error) => {
     try {
-      console.log(error);
       const { response } = error;
       if (response?.status === 401) {
-        localStorage.removeItem("ACCESS_TOKEN");
-        console.log(response);
+        localStorage.removeItem("auth_token");
       }
     } catch (err) {
       console.error(err);

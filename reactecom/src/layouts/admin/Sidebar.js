@@ -35,14 +35,14 @@ const Sidebar = () => {
       <li className="nav-item">
         <Link
           className="nav-link collapsed"
-          href="#"
+          to="/admin/category"
           data-toggle="collapse"
           data-target="#collapseTwo"
           aria-expanded="true"
           aria-controls="collapseTwo"
         >
           <i className="fas fa-fw fa-cog"></i>
-          <span>Components</span>
+          <span>Category</span>
         </Link>
         <div
           id="collapseTwo"

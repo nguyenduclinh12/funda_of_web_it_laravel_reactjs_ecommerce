@@ -10,6 +10,7 @@ import Register from "../components/frontend/auth/Register";
 import PrivateRoutes from "./PrivateRoutes";
 import Page403 from "../components/errors/Page403";
 import Page404 from "../components/errors/Page404";
+import Category from "../components/admin/Category";
 
 const routes = [
   {
@@ -46,6 +47,7 @@ const routes = [
     children: [
       { index: true, element: <Dashboard /> },
       { path: "profile", element: <Profile /> },
+      { path: "category", element: <Category /> },
     ],
   },
 ];

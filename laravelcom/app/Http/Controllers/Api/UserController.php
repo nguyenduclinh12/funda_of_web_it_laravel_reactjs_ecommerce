@@ -19,6 +19,7 @@ class UserController extends Controller
     public function createUser(Request $request)
     {
         try {
+            // return response()->json($request->all());
             $validateUser = Validator::make(
                 $request->all(),
                 [
@@ -37,7 +38,7 @@ class UserController extends Controller
             $user = User::create([
                 'name' => $request->name,
                 'email' => $request->email,
-                'role_as' => $request->role_as ? $request->role_as : 3,
+                'role_as' => $request->role_as ? $request->role_as : 4,
                 'password' => bcrypt(value: $request->password)
             ]);
             $token = "";
@@ -45,11 +46,13 @@ class UserController extends Controller
                 $token = $user->createToken('_ManagerToken', ['server:admin'], now()->addWeek())->plainTextToken;
             } else if ($user->role_as === 2) {
                 $token = $user->createToken('_UserToken', ['server:user'], now()->addWeek())->plainTextToken;
+            } else if ($user->role_as === 3) {
+                $token = $user->createToken('_UserToken', ['server:create'], now()->addWeek())->plainTextToken;
             } else {
                 $token = $user->createToken('Api Token', [''], now()->addWeek())->plainTextToken;
             }
             return response()->json([
-                'status' => true,
+                'status' => 200,
                 'username' => $user->name,
                 'message' => 'User Created Successfully',
                 'token' => $token

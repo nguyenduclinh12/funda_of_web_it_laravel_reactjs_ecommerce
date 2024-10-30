@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Api\CategoryController;
 use App\Http\Controllers\Api\UserController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
@@ -22,9 +23,9 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::middleware('isApiAdmin')->group(function () {
         Route::get('user', [UserController::class, 'index']);
         Route::get('/checkingAuthenticated', function (Request $request) {
-
             return $request->user() ? response()->json(['authenticated' => true, 'user' => $request->user()], 200) : response()->json(['authenticated' => false], 401);
         });
+        Route::post('category', [CategoryController::class, 'store']);
     });
     Route::post('/logout',  [UserController::class, 'logoutUser']);
     Route::post('/logout-all-device',  [UserController::class, 'logoutUserAllDevice']);

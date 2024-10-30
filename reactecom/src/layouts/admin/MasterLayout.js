@@ -6,7 +6,8 @@ import "../../assets/admin/vendor/jquery/jquery.min.js";
 
 // import "../../assets/admin/vendor/bootstrap/js/bootstrap.bundle.min.js";
 
-import "../../assets/admin/vendor/jquery-easing/jquery.easing.min.js";
+// import "../../assets/admin/vendor/jquery-easing/jquery.easing.min.js";
+import 'bootstrap/dist/js/bootstrap.bundle.min.js';
 import { Outlet } from "react-router-dom";
 
 

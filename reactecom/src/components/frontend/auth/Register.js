@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import Navbar from "../../../layouts/frontend/Navbar";
 import axios from "../../../lib/axios";
+import { useNavigate } from "react-router-dom";
 
 const Register = () => {
   const [isLoading, setIsLoading] = useState(true);
@@ -8,8 +9,10 @@ const Register = () => {
     name: "",
     email: "",
     password: "",
+    role_as: 3,
     error_list: [],
   });
+  const navigate = useNavigate();
   const handleInput = (e) => {
     setRegisterInput({ ...registerInput, [e.target.name]: e.target.value });
   };
@@ -21,16 +24,16 @@ const Register = () => {
       name: registerInput.name,
       email: registerInput.email,
       password: registerInput.password,
+      role_as: registerInput.role_as,
     };
-
     await csrf();
     await axios
       .post("api/auth/register", data)
       .then((res) => {
-        console.log(res.data);
         if (res.data.status === 200) {
           localStorage.setItem("auth_token", res.data.token);
           localStorage.setItem("auth_name", res.data.username);
+          navigate("/");
         } else {
           setRegisterInput({
             ...registerInput,
@@ -103,6 +106,23 @@ const Register = () => {
                     {registerInput.error_list.password ? (
                       <span className="text-danger">
                         * {registerInput.error_list.password}
+                      </span>
+                    ) : (
+                      ""
+                    )}
+                  </div>
+                  <div className="form-group mb-3">
+                    <label htmlFor="">Role_as</label>
+                    <input
+                      type="number"
+                      name="role_as"
+                      value={registerInput.role_as}
+                      onChange={handleInput}
+                      className="form-control"
+                    />
+                    {registerInput.error_list.role_as ? (
+                      <span className="text-danger">
+                        * {registerInput.error_list.role_as}
                       </span>
                     ) : (
                       ""
