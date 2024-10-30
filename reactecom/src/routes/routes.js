@@ -10,7 +10,9 @@ import Register from "../components/frontend/auth/Register";
 import PrivateRoutes from "./PrivateRoutes";
 import Page403 from "../components/errors/Page403";
 import Page404 from "../components/errors/Page404";
-import Category from "../components/admin/Category";
+import Category from "../components/admin/category/Category";
+import CategoryView from "../components/admin/category/CategoryView";
+import CategoryEdit from "../components/admin/category/CategoryEdit";
 
 const routes = [
   {
@@ -48,6 +50,8 @@ const routes = [
       { index: true, element: <Dashboard /> },
       { path: "profile", element: <Profile /> },
       { path: "category", element: <Category /> },
+      { path: "category-view", element: <CategoryView /> },
+      { path: "category-edit/:id", element: <CategoryEdit /> },
     ],
   },
 ];

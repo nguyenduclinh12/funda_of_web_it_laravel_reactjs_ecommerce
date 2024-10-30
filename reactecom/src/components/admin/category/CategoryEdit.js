@@ -1,7 +1,9 @@
-import React, { useState } from "react";
-import axios from "../../lib/axios";
+import React, { useEffect, useState } from "react";
+import { useNavigate, useParams } from "react-router-dom";
+import axios from "../../../lib/axios";
 
-const Category = () => {
+const CategoryEdit = () => {
+  const navigate = useNavigate();
   const [categoryInput, setCategoryInput] = useState({
     name: "",
     slug: "",
@@ -12,11 +14,30 @@ const Category = () => {
     meta_description: "",
     error_list: [],
   });
+  const { id } = useParams();
+  useEffect(() => {
+    axios
+      .get(`api/category-edit/${id}`)
+      .then((res) => {
+        if (res.status === 200) {
+          setCategoryInput((prevCategoryInput) => ({
+            //Sao chép tất cả các thuộc tính của categoryInput vào object mới
+            ...prevCategoryInput,
+            // Ghi đè các thuộc tính của res.data lên các thuộc tính cũ của categoryInput nếu chúng trùng tên.
+            ...res.data.data,
+          }));
+        }
+      })
+      .catch((err) => {
+        console.log(err.response.errors);
+      });
+  }, [id]);
+
   const handleChange = (e) => {
-    setCategoryInput({
-      ...categoryInput,
+    setCategoryInput((prevCategoryInput) => ({
+      ...prevCategoryInput,
       [e.target.name]: e.target.value,
-    });
+    }));
   };
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -30,16 +51,16 @@ const Category = () => {
       meta_description: categoryInput.meta_description,
     };
     axios
-      .post("api/category", data)
+      .patch(`api/category/${id}`, data)
       .then((res) => {
         console.log(res);
         if (res.data.status === 200) {
-        } else if (res.data.status === 401) {
+        } else if (res.data.status === 422) {
           setCategoryInput({ ...categoryInput, error_list: res.data.errors });
         }
       })
       .catch((err) => {
-        if (err.response.data.status === 400) {
+        if (err.response.data.status === 422) {
           setCategoryInput({
             ...categoryInput,
             error_list: err.response.data.errors,
@@ -47,7 +68,9 @@ const Category = () => {
         }
       });
   };
-  var display_error = [];
+
+  
+  let display_error = [];
   if (Object.keys(categoryInput.error_list).length) {
     display_error = [
       categoryInput.error_list.slug,
@@ -60,11 +83,13 @@ const Category = () => {
       <h1 className="mt-4">Category</h1>
       {display_error.length > 0 ? (
         <ul>
-          {display_error.filter((item)=>item!== undefined).map((item, index) => (
-            <li key={index}>
-              <span className="text-danger">{item}</span>
-            </li>
-          ))}
+          {display_error
+            .filter((item) => item !== undefined)
+            .map((item, index) => (
+              <li key={index}>
+                <span className="text-danger">{item}</span>
+              </li>
+            ))}
         </ul>
       ) : (
         ""
@@ -244,4 +269,4 @@ const Category = () => {
   );
 };
 
-export default Category;
+export default CategoryEdit;

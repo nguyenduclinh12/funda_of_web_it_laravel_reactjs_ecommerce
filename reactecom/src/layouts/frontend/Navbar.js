@@ -23,7 +23,7 @@ const Navbar = () => {
   };
 
   return (
-    <nav className="navbar navbar-expand-lg bg-body-tertiary bg-primary shadow sticky-top">
+    <nav className="navbar navbar-expand-lg bg-body-tertiary  shadow sticky-top">
       <div className="container-fluid">
         <Link className="navbar-brand" href="#">
           Navbar

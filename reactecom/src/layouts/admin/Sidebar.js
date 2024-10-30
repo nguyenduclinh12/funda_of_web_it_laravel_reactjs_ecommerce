@@ -35,7 +35,6 @@ const Sidebar = () => {
       <li className="nav-item">
         <Link
           className="nav-link collapsed"
-          to="/admin/category"
           data-toggle="collapse"
           data-target="#collapseTwo"
           aria-expanded="true"
@@ -52,11 +51,11 @@ const Sidebar = () => {
         >
           <div className="bg-white py-2 collapse-inner rounded">
             <h6 className="collapse-header">Custom Components:</h6>
-            <Link className="collapse-item" href="buttons.html">
-              Buttons
+            <Link className="collapse-item" to="/admin/category">
+              NEW
             </Link>
-            <Link className="collapse-item" href="cards.html">
-              Cards
+            <Link className="collapse-item" to="/admin/category-view">
+              LIST
             </Link>
           </div>
         </div>

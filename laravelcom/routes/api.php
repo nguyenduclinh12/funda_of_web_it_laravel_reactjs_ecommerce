@@ -25,7 +25,11 @@ Route::middleware('auth:sanctum')->group(function () {
         Route::get('/checkingAuthenticated', function (Request $request) {
             return $request->user() ? response()->json(['authenticated' => true, 'user' => $request->user()], 200) : response()->json(['authenticated' => false], 401);
         });
+        Route::get('category', [CategoryController::class, 'index']);
+        Route::get('category-edit/{id}', [CategoryController::class, 'show']);
         Route::post('category', [CategoryController::class, 'store']);
+        Route::patch('category/{id}', [CategoryController::class, 'update']);
+        Route::delete('category-delete/{id}', [CategoryController::class, 'delete']);
     });
     Route::post('/logout',  [UserController::class, 'logoutUser']);
     Route::post('/logout-all-device',  [UserController::class, 'logoutUserAllDevice']);
