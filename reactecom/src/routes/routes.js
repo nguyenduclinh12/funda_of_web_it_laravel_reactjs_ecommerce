@@ -13,15 +13,41 @@ import Page404 from "../components/errors/Page404";
 import Category from "../components/admin/category/Category";
 import CategoryView from "../components/admin/category/CategoryView";
 import CategoryEdit from "../components/admin/category/CategoryEdit";
+import ProductList from "../components/admin/product/List";
+import ProductCreate from "../components/admin/product/Create";
+import ProductEdit from "../components/admin/product/Edit";
+import About from "../components/frontend/About";
+import Contact from "../components/frontend/Contact";
+import FrontendLayout from "../layouts/frontend/FrontendLayout";
+import ViewCategory from "../components/frontend/collections/ViewCategory";
+import ViewProduct from "../components/frontend/collections/ViewProduct";
+import ViewProductDetails from "../components/frontend/collections/ViewProductDetails";
+import Cart from "../components/frontend/Cart";
+import Checkout from "../components/frontend/Checkout";
 
 const routes = [
   {
     path: "/",
-    element: (
-      <PrivateRoutes>
-        <Home />
-      </PrivateRoutes>
-    ),
+    element: <FrontendLayout />,
+    children: [
+      { index: true, element: <Home /> },
+      { path: "/about", element: <About /> },
+      { path: "/contact", element: <Contact /> },
+      { path: "/collections", element: <ViewCategory /> },
+      { path: "/collections/:slug", element: <ViewProduct /> },
+      {
+        path: "/collections/:category/:product",
+        element: <ViewProductDetails />,
+      },
+      {
+        path: "/cart",
+        element: <Cart />,
+      },
+      {
+        path: "/checkout",
+        element: <Checkout />,
+      },
+    ],
   },
   {
     path: "/login",
@@ -52,6 +78,9 @@ const routes = [
       { path: "category", element: <Category /> },
       { path: "category-view", element: <CategoryView /> },
       { path: "category-edit/:id", element: <CategoryEdit /> },
+      { path: "product-list", element: <ProductList /> },
+      { path: "product-create", element: <ProductCreate /> },
+      { path: "product/:id", element: <ProductEdit /> },
     ],
   },
 ];

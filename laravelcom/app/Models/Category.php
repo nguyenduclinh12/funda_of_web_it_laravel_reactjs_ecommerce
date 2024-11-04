@@ -17,4 +17,7 @@ class Category extends Model
         'meta_keyword',
         'meta_description',
     ];
+    public function product(){
+        return $this->hasMany(Product::class,'category_id');
+    }
 }

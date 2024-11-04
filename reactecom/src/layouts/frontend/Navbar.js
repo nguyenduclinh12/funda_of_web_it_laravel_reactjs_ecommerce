@@ -25,8 +25,8 @@ const Navbar = () => {
   return (
     <nav className="navbar navbar-expand-lg bg-body-tertiary  shadow sticky-top">
       <div className="container-fluid">
-        <Link className="navbar-brand" href="#">
-          Navbar
+        <Link className="navbar-brand" to="admin">
+          Admin
         </Link>
         <button
           className="navbar-toggler"
@@ -47,8 +47,18 @@ const Navbar = () => {
               </Link>
             </li>
             <li className="nav-item">
-              <Link className="nav-link" href="#">
-                Collection
+              <Link className="nav-link" to="/collections">
+                Collections
+              </Link>
+            </li>
+            <li className="nav-item">
+              <Link className="nav-link" to="/about">
+                About
+              </Link>
+            </li>
+            <li className="nav-item">
+              <Link className="nav-link" to="/contact">
+                Contact
               </Link>
             </li>
             {isLogin ? (
@@ -77,6 +87,11 @@ const Navbar = () => {
                 </Link>
               </li>
             )}
+            <li className="nav-item">
+              <Link className="nav-link" to="/cart">
+                Cart
+              </Link>
+            </li>
           </ul>
           <form className="d-flex" role="search">
             <input

@@ -10,7 +10,7 @@ function PrivateRoutes({ children }) {
     axios
       .get("api/checkingAuthenticated")
       .then((res) => {
-        console.log(res);
+        // console.log(res);
         if (res.status === 200) {
           setAuthenticated(true);
         } 

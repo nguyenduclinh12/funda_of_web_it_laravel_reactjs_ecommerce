@@ -71,6 +71,7 @@ class CategoryController extends Controller
     }
     public function update(Request $request, $id)
     {
+        
         try {
             $validator = Validator::make($request->all(), [
                 'meta_title' => 'required|max:191',

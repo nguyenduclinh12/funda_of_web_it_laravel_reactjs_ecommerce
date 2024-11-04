@@ -71,7 +71,7 @@ const Sidebar = () => {
           aria-controls="collapseUtilities"
         >
           <i className="fas fa-fw fa-wrench"></i>
-          <span>Utilities</span>
+          <span>Product</span>
         </Link>
         <div
           id="collapseUtilities"
@@ -81,17 +81,11 @@ const Sidebar = () => {
         >
           <div className="bg-white py-2 collapse-inner rounded">
             <h6 className="collapse-header">Custom Utilities:</h6>
-            <Link className="collapse-item" href="utilities-color.html">
-              Colors
+            <Link className="collapse-item" to={"/admin/product-list"}>
+              List
             </Link>
-            <Link className="collapse-item" href="utilities-border.html">
-              Borders
-            </Link>
-            <Link className="collapse-item" href="utilities-animation.html">
-              Animations
-            </Link>
-            <Link className="collapse-item" href="utilities-other.html">
-              Other
+            <Link className="collapse-item" to={"/admin/product-create"}>
+              Create
             </Link>
           </div>
         </div>
