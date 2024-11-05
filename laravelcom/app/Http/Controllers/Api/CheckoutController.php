@@ -77,4 +77,38 @@ class CheckoutController extends Controller
             ]);
         }
     }
+    public function validateOrder(Request $request)
+    {
+        try {
+            if (auth('sanctum')->check()) {
+                $validator = Validator::make($request->all(), [
+                    'first_name' => 'required|max:191',
+                    'last_name' => 'required|max:191',
+                    'phone' => 'required|max:191',
+                    'email' => 'required|max:191',
+                    'address' => 'required|max:191',
+                    'city' => 'required|max:191',
+                    'state' => 'required|max:191',
+                    'zipCode' => 'required|max:191',
+                ]);
+            }
+            if ($validator->fails()) {
+                return response()->json([
+                    'status' => 422,
+                    'errors' => $validator->messages()
+                ]);
+            } else {
+
+                return response()->json([
+                    'status' => 200,
+                    'message' => 'Form Validated successfully'
+                ]);
+            }
+        } catch (HttpException $ex) {
+            return response()->json([
+                'status' => 500,
+                'errors' => $ex->getMessage()
+            ]);
+        }
+    }
 }

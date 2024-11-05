@@ -60,6 +60,7 @@ Route::prefix('frontend')->group(function () {
     Route::patch('/cart-update-quantity/{cart_id}/{scope}', [CartController::class, 'updateQuantity']);
     Route::delete('/delete-cart-item/{cart_id}', [CartController::class, 'deleteItem']);
     Route::post('/place-order', [CheckoutController::class, 'placeOrder']);
+    Route::post('/validate-order', [CheckoutController::class, 'validateOrder']);
 });
 Route::post('/auth/register', [UserController::class, 'createUser']);
 Route::post('/auth/login', [UserController::class, 'loginUser']);

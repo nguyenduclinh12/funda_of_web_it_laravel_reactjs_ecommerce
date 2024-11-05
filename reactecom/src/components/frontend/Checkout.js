@@ -53,7 +53,7 @@ const Checkout = () => {
     }));
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = (e, payment_mode) => {
     e.preventDefault();
     const data = {
       first_name: checkoutInput.first_name,
@@ -64,18 +64,65 @@ const Checkout = () => {
       city: checkoutInput.city,
       zipCode: checkoutInput.zipCode,
       state: checkoutInput.state,
+      payment_mode: payment_mode,
     };
-    axios
-      .post("api/frontend/place-order", data)
-      .then((res) => {
-        console.log(res.data);
-        if (res.data.status === 200) {
-          navigate('/');
-        } else if (res.data.status === 422) {
-          setCheckoutInput({ ...checkoutInput, error_list: res.data.errors });
-        }
-      })
-      .catch((err) => {});
+    switch (payment_mode) {
+      case "cod":
+        axios
+          .post("api/frontend/place-order", data)
+          .then((res) => {
+            console.log(res.data);
+            if (res.data.status === 200) {
+              navigate("/");
+            } else if (res.data.status === 422) {
+              setCheckoutInput({
+                ...checkoutInput,
+                error_list: res.data.errors,
+              });
+            }
+          })
+          .catch((err) => {});
+        break;
+      case "razorpay":
+        axios
+          .post("api/frontend/validate-order", data)
+          .then((res) => {
+            if (res.data.status === 200) {
+              var options = {
+                key: "YOUR_KEY_ID", // Enter the Key ID generated from the Dashboard
+                amount: totalCartPrice * 100, // Amount is in currency subunits. Default currency is INR. Hence, 50000 refers to 50000 paise
+                currency: "INR",
+                name: "Acme Corp", //your business name
+                description: "Thank you for purchasing with Funda",
+                image: "https://example.com/your_logo",
+                handler: function (response) {
+                  alert(response.razorpay_payment_id);
+                },
+                prefill: {
+                  //We recommend using the prefill parameter to auto-fill customer's contact information, especially their phone number
+                  name: data.first_name + data.last_name, //your customer's name
+                  email: data.email,
+                  contact: data.phone, //Provide the customer's phone number for better conversion rates
+                },
+
+                theme: {
+                  color: "#3399cc",
+                },
+              };
+              var rzp = new window.Razorpay(options);
+              rzp.open();
+            } else if (res.data.status === 422) {
+              setCheckoutInput({
+                ...checkoutInput,
+                error_list: res.data.errors,
+              });
+            }
+          })
+          .catch((err) => {});
+        break;
+      default:
+        break;
+    }
   };
   return (
     <div>
@@ -89,7 +136,7 @@ const Checkout = () => {
           <div className="row">
             <div className="col-md-7">
               <div className="card">
-                <form onSubmit={handleSubmit}>
+                <form>
                   <div className="card-header">
                     <h4>Basic Information</h4>
                   </div>
@@ -177,8 +224,7 @@ const Checkout = () => {
                             id=""
                             onChange={handleChange}
                             defaultValue={checkoutInput.address}
-                          >
-                          </textarea>
+                          ></textarea>
                         </div>
                         {checkoutInput.error_list?.address ? (
                           <span className="text-danger">
@@ -246,8 +292,21 @@ const Checkout = () => {
                       </div>
                       <div className="col-md-12">
                         <div className="form-group mb-3 ">
-                          <button type="submit" className="btn btn-primary">
+                          <button
+                            type="button"
+                            className="btn btn-primary"
+                            onClick={(e) => handleSubmit(e, "code")}
+                          >
                             Place Order
+                          </button>
+                        </div>
+                        <div className="form-group mb-3 ">
+                          <button
+                            type="button"
+                            className="btn btn-primary"
+                            onClick={(e) => handleSubmit(e, "razorpay")}
+                          >
+                            Place Online
                           </button>
                         </div>
                       </div>
